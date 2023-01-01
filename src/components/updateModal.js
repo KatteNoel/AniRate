@@ -4,7 +4,7 @@ export const UpdateModal = (props) => {
     return (
        <Modal className="modal" show={props.modal} onHide={() => props.setShowModal(false)}>
                     <Modal.Header>
-                        <Modal.Title className="blue font">Update Anime</Modal.Title>
+                        <Modal.Title className="blue font">Update {props.animeToUpdate.name}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <FormGroup controlId="updateAnimeForm">
