@@ -6,6 +6,11 @@ body {
   text-align: center !important;
 }
 
+.center {
+  display: flex;
+  justify-content: center;
+}
+
 .float-right {
   float: right;
 }
@@ -57,13 +62,6 @@ button:hover {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-}
-
-.form {
-  background-color: #BBB;
-  outline: 1px solid #FFD082;
-  padding: 1rem;
-  margin: 1rem;
 }
 
 .image {

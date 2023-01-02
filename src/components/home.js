@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
+import { Button } from "react-bootstrap";
+
 import { api } from "../rest/api";
 import { Anime } from "./anime";
 import { CreateAnimeForm } from "./createanimeform";
@@ -7,7 +9,8 @@ import { UpdateModal } from "./updateModal";
 
 export const Home = () => {
     const [ animes, setAnimes ] = useState([]);
-    const [ modal, setShowModal ] = useState(false);
+    const [ updateModal, setShowUpdateModal ] = useState(false);
+    const [ newAnimeModal, setShowNewAnimeModal ] = useState(false);
     const [ id, setId ] = useState(null);
     const [ animeToUpdate, setAnimeToUpdate ] = useState(null);
 
@@ -33,6 +36,7 @@ export const Home = () => {
     async function createAnime() {
         let anime = {name: animeName.current.value, imageURL: url.current.value, rating: rating.current.value, description: description.current.value};
         clearFormValues();
+        showNewAnimeModal(false);
         await api.create(anime);
         getAnimes();
     }
@@ -76,26 +80,33 @@ export const Home = () => {
         }
 
         clearUpdateFormValues();
-        showModal(false);
+        showUpdateModal(false);
 
         await api.put(anime, id);
         getAnimes();
     }
 
-    function showModal(bool, _animeToUpdate, _id) {
+    function showUpdateModal(bool, _animeToUpdate, _id) {
         setId(_id);
         setAnimeToUpdate(_animeToUpdate);
 
-        setShowModal(bool);
+        setShowUpdateModal(bool);
+    }
+
+    function showNewAnimeModal(bool) {
+        setShowNewAnimeModal(bool);
     }
 
     return (
         <>
-        {modal ? <UpdateModal updateName={updateName} updateURL={updateURL} updateRating={updateRating} updateDescription={updateDescription} modal={modal} setShowModal={setShowModal} updateAnime={updateAnime} id={id} animeToUpdate={animeToUpdate}/>: null}
-        <CreateAnimeForm createAnime={createAnime} animeName={animeName} url={url} rating={rating} description={description}/>
-        <h2 className="text-center font yellow">My Rated Anime</h2>
+        <div className="center">
+            <Button variant="warning" className="font yellow-background margin" onClick={() => showNewAnimeModal(true)}>Rate New Anime</Button>
+        </div>
+        {newAnimeModal ? <CreateAnimeForm createAnime={createAnime} animeName={animeName} url={url} rating={rating} description={description} modal={newAnimeModal} setShowModal={showNewAnimeModal}/> : null}
+        {updateModal ? <UpdateModal updateName={updateName} updateURL={updateURL} updateRating={updateRating} updateDescription={updateDescription} modal={updateModal} setShowModal={showUpdateModal} updateAnime={updateAnime} id={id} animeToUpdate={animeToUpdate}/>: null}
+        <h2 className="text-center font yellow margin">My Rated Anime</h2>
         <div className="anime-cards">
-            {animes.map((anime, index) => <Anime key={index} anime={anime} deleteAnime={deleteAnime} updateAnime={updateAnime} showModal={showModal}/>)} 
+            {animes.map((anime, index) => <Anime key={index} anime={anime} deleteAnime={deleteAnime} updateAnime={updateAnime} showModal={showUpdateModal}/>)} 
         </div>
         </>
     );
